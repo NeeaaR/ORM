@@ -1,5 +1,7 @@
 # ORM
 
-pip install pymysql
-pip install SQLAlchemy
-pip install Flask-SQLAlchemy
+## `TO INSTALL`
+
+pip install pymysql <br/>
+pip install SQLAlchemy <br/>
+pip install Flask-SQLAlchemy <br/>
