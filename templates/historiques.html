@@ -1,0 +1,32 @@
+{% extends "index.html" %}
+
+{% block content %}
+<h1 class="text-center">Historique :</h1>
+<div class="container">
+    <div class="row"></div>
+    <table class="table">
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Item</th>
+          <th scope="col">Order</th>
+          <th scope="col">Produit</th>
+          <th scope="col">Quantité</th>
+          <th scope="col">Prix</th>
+          <th scope="col">Réduction</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for order_item in order_items %}
+        <tr>
+          <th scope="row">{{order_item.item_id}}</th>
+          <td>{{order_item.item_id}}</td>
+          <td>{{order_item.order_id}}</td>
+          <td>{{order_item.product_id}}</td>
+          <td>{{order_item.quantity}}</td>
+          <td>{{order_item.list_price}}</td>
+          <td>{{order_item.discount}}</td>
+        {% endfor %}
+  </div>
+
+{% endblock content %}

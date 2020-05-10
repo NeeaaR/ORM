@@ -1,0 +1,22 @@
+{% extends "index.html" %}
+
+{% block content %}
+<h1 class="text-center">Liste des marques</h1>
+<div class="container">
+    <div class="row"></div>
+    <table class="table">
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Nom</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for brand in brands %}
+        <tr>
+          <th scope="row">{{brand.brand_id}}</th>
+          <td>{{brand.brand_name}}</td>
+        {% endfor %}
+  </div>
+
+{% endblock content %}

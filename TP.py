@@ -1,6 +1,7 @@
 from flask import Flask, jsonify,request, render_template
 from flask_sqlalchemy import SQLAlchemy
 import sqlalchemy as db
+
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:@localhost:3306/python_database'
 app.config['SQLALCHEMY_ECHO'] = True
@@ -103,15 +104,30 @@ class Stores(db.Model):
     def __repr__(self):
         return '<Stores %r>' % self.store_id
 
-@app.route("/", methods=['GET'])
+@app.route("/")
 def index():
-    tests = Brands.query.all() 
-    return render_template('index.html', tests=tests)
+    products = Products.query.all()
+    return render_template('index.html', products=products)
 
-@app.route("/orders")
-def Orders():
+@app.route("/brands", methods=['GET'])
+def brands_show():
+    brands = Brands.query.all() 
+    return render_template('brands.html', brands=brands)
+
+@app.route("/commandes")
+def Orders_show():
     orders = Orders.query.all()
     return render_template('orders.html', orders=orders)
+
+@app.route("/clients")
+def Clients_show():
+    customers = Customers.query.all()
+    return render_template('customers.html', customers=customers)
+
+@app.route("/historique")
+def Historique_show():
+    order_items = Order_items.query.all()
+    return render_template('historiques.html', order_items=order_items)
 
 if __name__ == '__main__':
     app.run(debug=True, port=8080)  
