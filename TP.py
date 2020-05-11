@@ -1,4 +1,4 @@
-from flask import Flask, jsonify,request, render_template
+from flask import Flask, jsonify,request, render_template, redirect
 from flask_sqlalchemy import SQLAlchemy
 import sqlalchemy as db
 
@@ -83,13 +83,11 @@ class Staffs(db.Model):
     def __repr__(self):
         return '<Staff %r>' % self.staff_id
 
-class Stocks(db.Model):
-    store_id = db.Column(db.Integer, primary_key=True)
-    product_id = db.Column(db.Integer)
-    quantity = db.Column(db.Integer)
-
-    def __repr__(self):
-        return '<Stocks %r>' % self.product_id
+stock = db.Table('Stocks',
+    db.Column('store_id', db.Integer, db.ForeignKey('stores.store_id'), primary_key=True),
+    db.Column('product_id', db.Integer, db.ForeignKey('products.product_id'), primary_key=True),
+    db.Column('quantity', db.Integer)
+)
 
 class Stores(db.Model):
     store_id = db.Column(db.Integer, primary_key=True)
@@ -133,6 +131,18 @@ def Historique_show():
 def Magasins_show():
     stores = Stores.query.all()
     return render_template('stores.html', stores=stores)
+
+@app.route("/add_brands",methods = ['POST', 'GET'])
+def AddStore():
+    if request.method == "POST":
+        name = request.form['name']
+        add = Brands(brand_name=name)
+        db.session.add(add)
+        db.session.commit()
+        return redirect(url_for("brands"))
+
+
+    return render_template('add_brands.html')
 
 if __name__ == '__main__':
     app.run(debug=True, port=8080)  
