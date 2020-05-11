@@ -1,0 +1,34 @@
+{% extends "index.html" %}
+
+{% block content %}
+<h1 class="text-center">Liste des magasins</h1>
+<div class="container">
+    <div class="row"></div>
+    <table class="table">
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Nom</th>
+          <th scope="col">Téléphone</th>
+          <th scope="col">Mail</th>
+          <th scope="col">Rue</th>
+          <th scope="col">Ville</th>
+          <th scope="col">Etat</th>
+          <th scope="col">Code postal</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for store in stores %}
+        <tr>
+          <th scope="row">{{store.store_id}}</th>
+          <td>{{store.store_name}}</td>
+          <td>{{store.phone}}</td>
+          <td>{{store.email}}</td>
+          <td>{{store.street}}</td>
+          <td>{{store.city}}</td>
+          <td>{{store.state}}</td>
+          <td>{{store.zip_code}}</td>
+        {% endfor %}
+  </div>
+
+{% endblock content %}
