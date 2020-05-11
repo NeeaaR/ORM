@@ -86,7 +86,7 @@ class Staffs(db.Model):
 stock = db.Table('Stocks',
     db.Column('store_id', db.Integer, db.ForeignKey('stores.store_id'), primary_key=True),
     db.Column('product_id', db.Integer, db.ForeignKey('products.product_id'), primary_key=True),
-    db.Column('quantity', db.Integer)
+    db.Column('quantity', db.Integer, nullable=False)
 )
 
 class Stores(db.Model):
