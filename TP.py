@@ -144,5 +144,9 @@ def AddStore():
 
     return render_template('add_brands.html')
 
+@app.errorhandler(404)
+def page_not_found(error):
+    return render_template('errors/404.html'), 404
+
 if __name__ == '__main__':
     app.run(debug=True, port=8080)  
