@@ -1,0 +1,12 @@
+{% extends "index.html" %}
+
+{% block content %}
+<h1>Ajouter une marque</h1>
+<form action="http://127.0.0.1:8080/add_brands" method="POST">
+<div class="form-group" action="http://127.0.0.1:8080/add_brands">
+    <label for="exampleInputEmail1">Non de la marque :</label>
+    <input type="text" class="form-control" id="exampleInput" name="name" aria-describedby="emailHelp" placeholder="Entrer un nom">
+    <button type="submit" class="btn btn-primary">Envoyer</button>
+  </div>
+</form>
+{% endblock content %}

@@ -1,4 +1,4 @@
-from flask import Flask, jsonify,request, render_template
+from flask import Flask, jsonify,request, render_template, redirect
 from flask_sqlalchemy import SQLAlchemy
 import sqlalchemy as db
 
@@ -37,21 +37,21 @@ class Customers(db.Model):
 
 class Orders(db.Model):
     order_id = db.Column(db.Integer, primary_key=True)
-    customer_id = db.Column(db.Integer)
+    customer_id = db.Column(db.Integer, db.ForeignKey('customers.customer_id'), nullable=False)
     order_status = db.Column(db.String(40), nullable=True)
     order_date = db.Column(db.DateTime, nullable=True)
     required_date = db.Column(db.DateTime, nullable=True)
     shipped_date = db.Column(db.DateTime, nullable=True)
-    store_id = db.Column(db.Integer)
-    staff_id = db.Column(db.Integer)
+    store_id = db.Column(db.Integer, db.ForeignKey('stores.store_id'), nullable=False)
+    staff_id = db.Column(db.Integer, db.ForeignKey('staffs.staff_id'), nullable=False)
 
     def __repr__(self):
         return '<Orders %r>' % self.order_id
 
 class Order_items(db.Model): 
     item_id = db.Column(db.Integer, primary_key=True, unique=False)
-    order_id = db.Column(db.Integer)
-    product_id = db.Column(db.Integer)
+    order_id = db.Column(db.Integer, db.ForeignKey('orders.order_id'), nullable=False)
+    product_id = db.Column(db.Integer, db.ForeignKey('products.product_id'), nullable=False)
     quantity = db.Column(db.Integer, nullable=False)
     list_price = db.Column(db.Float, nullable=True)
     discount = db.Column (db.Float, nullable=True)
@@ -62,8 +62,8 @@ class Order_items(db.Model):
 class Products(db.Model):
     product_id = db.Column(db.Integer, primary_key=True, nullable=False)
     product_name = db.Column(db.String(100), nullable=False)
-    brand_id = db.Column(db.Integer)
-    category_id = db.Column(db.Integer)
+    brand_id = db.Column(db.Integer, db.ForeignKey('brands.brand_id'), nullable=False)
+    category_id = db.Column(db.Integer, db.ForeignKey('category.category_id'), nullable=False)
     model_year = db.Column(db.Integer, nullable=True)
     list_price = db.Column(db.Float, nullable=True)
 
@@ -77,19 +77,17 @@ class Staffs(db.Model):
     email = db.Column(db.String(40), nullable=True)
     phone = db.Column(db.String(40), nullable=True)
     active = db.Column(db.Integer, nullable=True)
-    store_id = db.Column(db.Integer)
-    manager_id = db.Column(db.Integer)
+    store_id = db.Column(db.Integer, db.ForeignKey('stores.store_id'), nullable=False)
+    manager_id = db.Column(db.Integer, nullable=True)
 
     def __repr__(self):
         return '<Staff %r>' % self.staff_id
 
-class Stocks(db.Model):
-    store_id = db.Column(db.Integer, primary_key=True)
-    product_id = db.Column(db.Integer)
-    quantity = db.Column(db.Integer)
-
-    def __repr__(self):
-        return '<Stocks %r>' % self.product_id
+stock = db.Table('Stocks',
+    db.Column('store_id', db.Integer, db.ForeignKey('stores.store_id'), primary_key=True),
+    db.Column('product_id', db.Integer, db.ForeignKey('products.product_id'), primary_key=True),
+    db.Column('quantity', db.Integer, nullable=False)
+)
 
 class Stores(db.Model):
     store_id = db.Column(db.Integer, primary_key=True)
@@ -128,6 +126,23 @@ def Clients_show():
 def Historique_show():
     order_items = Order_items.query.all()
     return render_template('historiques.html', order_items=order_items)
+
+@app.route("/magasins")
+def Magasins_show():
+    stores = Stores.query.all()
+    return render_template('stores.html', stores=stores)
+
+@app.route("/add_brands",methods = ['POST', 'GET'])
+def AddStore():
+    if request.method == "POST":
+        name = request.form['name']
+        add = Brands(brand_name=name)
+        db.session.add(add)
+        db.session.commit()
+        return redirect(url_for("brands"))
+
+
+    return render_template('add_brands.html')
 
 if __name__ == '__main__':
     app.run(debug=True, port=8080)  
